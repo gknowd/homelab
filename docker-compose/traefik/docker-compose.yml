@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  traefik:
+    image: traefik:latest
+    command: --docker --docker.domain=cloudtorq.io
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
+    labels:
+      - "traefik.frontend.rule=Host:magahome.cloudtorq.io"
+      - "traefik.port=8080"
+    container_name: traefik
+    restart: always
+
+networks:
+  proxy:
+    external: true
