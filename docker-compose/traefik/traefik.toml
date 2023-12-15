@@ -1,47 +1,35 @@
-#Traefik Global Configuration
-debug = false
-checkNewVersion = true
-logLevel = "ERROR"
+defaultEntryPoints = ["http", "https"]
 
-#Define the EntryPoint for HTTP and HTTPS
-defaultEntryPoints = ["https","http"]
+[api]
+dashboard = true
 
-#Enable Traefik Dashboard on port 8080
-#with basic authentication method
-#mohammad and password
-[web]
-address = ":8080"
-[web.auth.basic]
-users = ["mohammad:$apr1$hEgpZUN2$OYG3KwpzI3T1FqIg9LIbi."]
+# You can create config files in /var/lib/traefik/traefik.conf and Traefik will automatically reload them
+[providers]
+[providers.docker]
+ watch = true
+ network = "web"
+[providers.file]
+filename = "traefik_dynamic.toml"
 
-#Define the HTTP port 80 and
-#HTTPS port 443 EntryPoint
-#Enable automatically redirect HTTP to HTTPS
+[log]
+level = "DEBUG"
+
 [entryPoints]
-[entryPoints.http]
+[entryPoint.dashboard]
+address = ":8081"
+[entryPoints.web]
 address = ":80"
-[entryPoints.http.redirect]
-entryPoint = "https"
-[entryPoints.https]
+[entryPoints.web.http]
+[entryPoints.web.http.redirections]
+[entryPoints.web.http.redirections.entryPoint]
+to = "websecure"
+scheme = "https"
+[entryPoints.websecure]
 address = ":443"
-[entryPoints.https.tls]
 
-#Enable retry sending a request if the network error
-[retry]
-
-#Define Docker Backend Configuration
-[docker]
-endpoint = "unix:///var/run/docker.sock"
-domain = "magahome.cloudtorq.io"
-watch = true
-exposedbydefault = false
-
-#Letsencrypt Registration
-#Define the Letsencrypt ACME HTTP challenge
-[acme]
+[certificatesResolvers.letsencrypttls.acme]
+# TODO Add your email here
 email = "greg@cloudtorq.com"
-storage = "acme.json"
-entryPoint = "https"
-OnHostRule = true
-[acme.httpChallenge]
-entryPoint = "http"
+storage = "/etc/traefik/acme/acme.json"
+[certificatesResolvers.letsencrypttls.acme.httpChallenge]
+entryPoint = "web"
