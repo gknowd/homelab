@@ -1,11 +1,3 @@
-networks:
-  traefik:
-    external: true
-
-volumes:
-  letsencrypt:
-    name: traefik-letsencrypt
-
 services:
   traefik:
     image: traefik:v3.5
@@ -18,34 +10,34 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt:/letsencrypt
+      - /home/gknowd/letsencrypt:/letsencrypt
     environment:
-      # Cloudflare DNS token (scopes: Zone:DNS:Edit on the zones you issue certs for)
-      # Put this in a .env file as CLOUDFLARE_API_TOKEN=xxxxx
       CLOUDFLARE_API_TOKEN: "${CLOUDFLARE_API_TOKEN}"
-      # Some setups/libraries use these names—kept here for compatibility. Remove if unnecessary.
       CF_API_TOKEN: "${CLOUDFLARE_API_TOKEN}"
       CF_DNS_API_TOKEN: "${CLOUDFLARE_API_TOKEN}"
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.cloudtorq.io`)"
+        - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+        - "traefik.http.routers.traefik-dashboard.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.traefik-dashboard.service=api@internal"
     command:
       - "--providers.docker=true"
-      # (good practice) only route containers explicitly labeled
       - "--providers.docker.exposedByDefault=false"
-
       - "--api.dashboard=true"
-
-      # ACME / Let's Encrypt (DNS-01 via Cloudflare)
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.letsencrypt.acme.email=greg@cloudtorq.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
-
-      # Entrypoints
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
       - "--entrypoints.websecure.http.tls.domains[0].main=cloudtorq.io"
       - "--entrypoints.websecure.http.tls.domains[0].sans=*.cloudtorq.io"
+
+networks:
+  traefik:
+    external: true
