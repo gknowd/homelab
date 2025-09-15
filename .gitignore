@@ -1,0 +1,2 @@
+docker-compose/mosquitto/data/mosquitto.db
+docker-compose/mosquitto/log/mosquitto.log

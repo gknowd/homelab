@@ -1,16 +1,42 @@
-version: '3'
+version: "3.8"
 
 volumes:
   uptimekuma-data:
     external: true
     name: uptime-kuma
 
+networks:
+  traefik:
+    external: true
+
 services:
   uptimekuma:
     image: louislam/uptime-kuma:latest
     container_name: uptimekuma
-    ports:
-      - "3001:3001"
+    # No host port mapping when using Traefik
     volumes:
-      -  uptimekuma-data:/app/data
+      - uptimekuma-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock # optional: only if you want Docker monitoring
     restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+
+      # Tell Traefik which network to use to reach the container
+      - "traefik.docker.network=traefik"
+
+      # HTTPS router
+      - "traefik.http.routers.uptimekuma.rule=Host(`uptime.cloudtorq.io`)"
+      - "traefik.http.routers.uptimekuma.entrypoints=websecure"
+      - "traefik.http.routers.uptimekuma.tls=true"
+      - "traefik.http.routers.uptimekuma.tls.certresolver=letsencrypt"
+
+      # Service: internal container port
+      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
+
+      # (Optional) HTTP -> HTTPS redirect router
+      - "traefik.http.routers.uptimekuma-redirect.rule=Host(`uptime.cloudtorq.io`)"
+      - "traefik.http.routers.uptimekuma-redirect.entrypoints=web"
+      - "traefik.http.routers.uptimekuma-redirect.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"

@@ -1,0 +1,47 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: web
+
+api:
+  dashboard: true  # Enable the Traefik dashboard
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: greg@cloudtorq.com
+      storage: acme.json
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+      wildcard: true
+
+http:
+  routers:
+    tkserver:
+      rule: "Host(`tkserver.local`)"
+      entryPoints:
+        - websecure
+      service: tkserver-service
+      tls:
+        certResolver: letsencrypt
+    traefik-dashboard:
+      rule: "Host(`traefik.cloudtorq.io`)"  # Change this to your desired hostname
+      entryPoints:
+        - websecure
+      service: api@internal
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    tkserver-service:
+      loadBalancer:
+        servers:
+          - url: "http://tkserver:80"
