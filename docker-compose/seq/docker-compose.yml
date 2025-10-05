@@ -1,22 +1,38 @@
 version: '3.8'
+
 services:
   seq:
     image: datalust/seq:latest
     container_name: seq
     restart: unless-stopped
-    environment:
-      ACCEPT_EULA: Y
     volumes:
-      - seq-data:/data
-    ports:
-      - "80:80"
-      - "5341:5341"
+      - /home/gknowd/seq-data:/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_BASEURI=https://seq.cloudtorq.io
     networks:
-      - seq_net
-      
-volumes:
-  seq-data:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+
+      # Tell Traefik which network to use to reach the container
+      - "traefik.docker.network=traefik"
+
+      # HTTPS router
+      - "traefik.http.routers.seq.rule=Host(`seq.cloudtorq.io`)"
+      - "traefik.http.routers.seq.entrypoints=websecure"
+      - "traefik.http.routers.seq.tls=true"
+      - "traefik.http.routers.seq.tls.certresolver=letsencrypt"
+
+      # Service: internal container port
+      - "traefik.http.services.seq.loadbalancer.server.port=80"
+
+      # (Optional) HTTP -> HTTPS redirect router
+      - "traefik.http.routers.seq-redirect.rule=Host(`seq.cloudtorq.io`)"
+      - "traefik.http.routers.seq-redirect.entrypoints=web"
+      - "traefik.http.routers.seq-redirect.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
 networks:
-  seq_net:
-    driver: bridge
+  traefik:
+    external: true
