@@ -33,6 +33,9 @@ services:
       - N8N_HOST=n8n.cloudtorq.io
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=true
       - WEBHOOK_URL=https://n8n.cloudtorq.io/
       - GENERIC_TIMEZONE=America/New_York
     volumes:
