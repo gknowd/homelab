@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=n8n
     volumes:
-      - /mnt/storage/postgresql:/var/lib/postgresql/data
+      - /mnt/storage/postgresql-n8n:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U n8n']
       interval: 5s
