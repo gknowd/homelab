@@ -51,8 +51,10 @@ sudo chown 999:999 /mnt/storage/mongodb
 2. Name your stack (e.g., `mongodb`)
 3. Copy and paste the contents of `docker-compose.yml` into the web editor
 4. Under **Environment variables**, add:
-    - `MONGO_INITDB_ROOT_USERNAME` (choose a strong username)
-    - `MONGO_INITDB_ROOT_PASSWORD` (choose a strong password)
+  - `MONGO_INITDB_ROOT_USERNAME` (choose a strong username)
+  - `MONGO_INITDB_ROOT_PASSWORD` (choose a strong password)
+    
+  **Important:** These variables must be set for MongoDB authentication to be enabled. If you previously started the container without these variables, you must clear the data directory (`/mnt/storage/mongodb`) before redeploying, or MongoDB will continue running without authentication.
 5. Deploy the stack
 
 ### 4. Verify MongoDB is Running
