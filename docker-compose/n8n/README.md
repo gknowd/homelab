@@ -28,8 +28,13 @@ This guide explains how to deploy n8n with PostgreSQL using Docker Compose, with
    sudo mkdir -p /mnt/storage/postgresql-n8n
    sudo mkdir -p /mnt/storage/n8n
    sudo chown -R 999:999 /mnt/storage/postgresql-n8n
+   sudo chmod 700 /mnt/storage/postgresql-n8n
    sudo chown -R 1000:1000 /mnt/storage/n8n
    ```
+
+   - The PostgreSQL directory (`/mnt/storage/postgresql-n8n`) must be owned by UID 999 and have permissions set to 700 for security and compatibility with the official PostgreSQL Docker image.
+   - If your system uses SELinux or AppArmor, ensure Docker is allowed to write to this directory (adjust security contexts or profiles as needed).
+   - Make sure there is enough free disk space for your database.
 
 3. **Start the stack:**
    ```bash
