@@ -22,7 +22,7 @@ This directory contains a `docker-compose.yaml` file to run a PostgreSQL server 
 
 3. **Access PostgreSQL:**
    - The server will be available on port `5432` of your Docker host.
-   - Data is stored persistently in `/mnt/storage/postgresql` on your host.
+   - Data is stored persistently in `/mnt/storage/postgresql-server` on your host.
 
 4. **Stop the container:**
    ```bash
@@ -41,8 +41,8 @@ This directory contains a `docker-compose.yaml` file to run a PostgreSQL server 
 2. **Persistent Storage:**
    - Ensure `/mnt/storage/postgresql` exists and is writable by Docker. You may need to create this directory on your host:
      ```bash
-     sudo mkdir -p /mnt/storage/postgresql
-     sudo chown 999:999 /mnt/storage/postgresql
+     sudo mkdir -p /mnt/storage/postgresql-server
+     sudo chown 999:999 /mnt/storage/postgresql-server
      ```
      (PostgreSQL runs as UID 999 by default.)
 
@@ -51,7 +51,7 @@ This directory contains a `docker-compose.yaml` file to run a PostgreSQL server 
 
 ## Notes
 - The default database, user, and password are set via environment variables. Change them as needed for your use case.
-- The data directory is mapped to `/mnt/storage/postgresql` for persistence.
+- The data directory is mapped to `/mnt/storage/postgresql-server` for persistence.
 - If you change the mapped port, update the `ports` section in the compose file.
 
 ## References
