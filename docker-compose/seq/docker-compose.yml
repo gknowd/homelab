@@ -6,7 +6,7 @@ services:
     container_name: seq
     restart: unless-stopped
     ports:
-      - 5341:80
+      - 5341:5341
     volumes:
       - /mnt/storage/seq-data:/data
     environment:
