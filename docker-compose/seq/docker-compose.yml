@@ -6,6 +6,7 @@ services:
     container_name: seq
     restart: unless-stopped
     ports:
+      - 5342:80
       - 5341:5341
     volumes:
       - /mnt/storage/seq-data:/data
@@ -27,7 +28,7 @@ services:
       - "traefik.http.routers.seq.tls.certresolver=letsencrypt"
 
       # Service: internal container port
-      - "traefik.http.services.seq.loadbalancer.server.port=5341"
+      - "traefik.http.services.seq.loadbalancer.server.port=5342"
 
       # (Optional) HTTP -> HTTPS redirect router
       - "traefik.http.routers.seq-redirect.rule=Host(`seq.cloudtorq.io`)"
