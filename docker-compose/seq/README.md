@@ -7,12 +7,12 @@ This guide explains how to deploy Seq (datalust/seq) using Docker Compose and Tr
 - Portainer installed and running (see https://www.portainer.io/installation/)
 - Traefik reverse proxy deployed and running on the `traefik` Docker network
 - DNS record for `seq.cloudtorq.io` pointing to your host's public IP
-- Directory `/home/gknowd/seq-data` exists and is writable by Docker
+- Directory `/mnt/storage/seq-data` exists and is writable by Docker
 
 ## Directory Structure
 ```
 /home/gknowd/homelab/docker-compose/seq/docker-compose.yml
-/home/gknowd/seq-data                # Seq data will be stored here
+/mnt/storage/seq-data                # Seq data will be stored here
 ```
 
 ## docker-compose.yml Example
@@ -24,7 +24,7 @@ services:
     container_name: seq
     restart: unless-stopped
     volumes:
-      - /home/gknowd/seq-data:/data
+  - /mnt/storage/seq-data:/data
     environment:
       - ACCEPT_EULA=Y
       - SEQ_BASEURI=https://seq.cloudtorq.io
@@ -52,8 +52,8 @@ networks:
 ### 1. Prepare the Data Directory
 Ensure the data directory exists and is owned by the user running Docker:
 ```bash
-sudo mkdir -p /home/gknowd/seq-data
-sudo chown 1000:1000 /home/gknowd/seq-data
+sudo mkdir -p /mnt/storage/seq-data
+sudo chown 1000:1000 /mnt/storage/seq-data
 ```
 
 ### 2. Open Portainer
