@@ -11,7 +11,7 @@ services:
       - /mnt/storage/seq-data:/data
     environment:
       - ACCEPT_EULA=Y
-      - SEQ_BASEURI=https://seq.cloudtorq.io
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
     networks:
       - traefik
     labels:
