@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.seq.tls.certresolver=letsencrypt"
 
       # Service: internal container port
-      - "traefik.http.services.seq.loadbalancer.server.port=80"
+      - "traefik.http.services.seq.loadbalancer.server.port=5341"
 
       # (Optional) HTTP -> HTTPS redirect router
       - "traefik.http.routers.seq-redirect.rule=Host(`seq.cloudtorq.io`)"
