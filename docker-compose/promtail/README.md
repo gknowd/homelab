@@ -45,7 +45,7 @@ sudo chown -R 1000:1000 /mnt/storage/promtail
 ```
 
 ### 2. Create Your Promtail Config
-Edit `/mnt/storage/promtail/promtail-config.yaml` with your desired configuration. For syslog ingestion, include a `syslog` receiver block, e.g.:
+Edit `/mnt/storage/promtail/promtail-config.yaml` with your desired configuration. For syslog ingestion, use the following example (compatible with Promtail's standard mode):
 ```yaml
 server:
   http_listen_port: 9080
@@ -55,13 +55,17 @@ positions:
   filename: /promtail/positions.yaml
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: https://loki.cloudtorq.io/loki/api/v1/push
 
-receivers:
-  syslog:
-    listen_address: 0.0.0.0:514
-    labels:
-      job: syslog
+scrape_configs:
+  - job_name: syslog
+    syslog:
+      listen_address: 0.0.0.0:514
+      idle_timeout: 60s
+      label_configs:
+        - action: replace
+          target_label: job
+          replacement: syslog
 ```
 
 ### 3. Open Portainer
