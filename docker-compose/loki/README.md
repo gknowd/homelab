@@ -53,8 +53,11 @@ networks:
 Ensure the data directory exists and is owned by the user running Docker:
 ```bash
 sudo mkdir -p /mnt/storage/loki
-sudo chown 1000:1000 /mnt/storage/loki
+# Loki runs as UID 10001. Set correct ownership and permissions:
+sudo chown -R 10001:10001 /mnt/storage/loki
+sudo chmod -R 755 /mnt/storage/loki
 ```
+If you see a permission error like `mkdir /loki/rules: permission denied`, make sure the directory and all subdirectories are owned by UID 10001 and have write permissions.
 
 ### 2. Open Portainer
 - Go to your Portainer web UI (e.g., http://your-server:9000)
