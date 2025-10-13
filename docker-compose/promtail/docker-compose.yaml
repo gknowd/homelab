@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - /mnt/storage/promtail/promtail-config.yaml:/etc/promtail/promtail.yaml:ro
+      - /var/log:/var/log:ro
+      - /mnt/storage/promtail:/promtail
+    command: -config.file=/etc/promtail/promtail.yaml
+    ports:
+      - "514:514/udp"
+      - "1514:1514/tcp"
