@@ -13,4 +13,17 @@ services:
     ports:
       - "514:514/udp"
       - "1514:1514/tcp"
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.promtail.rule=Host(`promtail.cloudtorq.io`)"
+      - "traefik.http.routers.promtail.entrypoints=websecure"
+      - "traefik.http.routers.promtail.tls=true"
+      - "traefik.http.routers.promtail.tls.certresolver=letsencrypt"
+      - "traefik.http.services.promtail.loadbalancer.server.port=9080"
 
+networks:
+  traefik:
+    external: true
