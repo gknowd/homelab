@@ -62,12 +62,6 @@ services:
       # Service: internal container port
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
 
-      # HTTP to HTTPS redirect
-      - "traefik.http.routers.n8n-http.rule=Host(`n8n.cloudtorq.io`)"
-      - "traefik.http.routers.n8n-http.entrypoints=web"
-      - "traefik.http.routers.n8n-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-
 networks:
   n8n-network:
     driver: bridge
