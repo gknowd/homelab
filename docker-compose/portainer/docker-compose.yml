@@ -1,26 +1,20 @@
-version: '3.2'
-
-volumes:
-  portainer-data:
-    driver: local
-    
 services:
-  portainer-agent:
-    container_name: portainer-agent
-    image: portainer/agent:latest
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ee:lts
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - portainer_data:/data
     ports:
-      - "9001:9001"
-  portainer:
-    container_name: portainer
-    image: 'portainer/portainer-ce:latest'
-    ports:
-      - '9000:9000'
-      - '9443:9443'
-      - '8000:8000'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data:/data
+      - 9443:9443
+      - 8000:8000  # Remove if you do not intend to use Edge Agents
+
+volumes:
+  portainer_data:
+    name: portainer_data
+    external: true
+
+networks:
+  default:
+    name: portainer_network
