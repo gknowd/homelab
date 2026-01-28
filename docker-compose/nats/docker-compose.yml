@@ -10,7 +10,7 @@ services:
       - "6222:6222"   # cluster routes
       - "8222:8222"   # monitoring HTTP
     volumes:
-      - ./mnt/storage/nats:/data
+      - /mnt/storage/nats:/data
       - ./nats.conf:/etc/nats/nats.conf:ro
     command: ["-c", "/etc/nats/nats.conf"]
     networks:
