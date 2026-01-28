@@ -104,7 +104,7 @@ services:
          - db_data:/var/lib/postgresql/data
         environment:
             POSTGRES_USER: space
-            POSTGRES_PASSWORD: spacepassword
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: spacedb
         ports:
         - "5432"
@@ -143,8 +143,8 @@ services:
         volumes:
         - minio_data:/data
         environment:
-            MINIO_ROOT_USER: space-access-key
-            MINIO_ROOT_PASSWORD: space-secret-key
+            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
         command: server --address :9000 --console-address :9001 --compat /data
         ports:
         - "9000:9000"
