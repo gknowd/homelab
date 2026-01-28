@@ -11,7 +11,7 @@ services:
       - "8222:8222"   # monitoring HTTP
     volumes:
       - /mnt/storage/nats:/data
-      - ./nats.conf:/etc/nats/nats.conf:ro
+      - /home/gknowd/docker-compose/nats/config/nats.conf:/etc/nats/nats.conf:ro
     command: ["-c", "/etc/nats/nats.conf"]
     networks:
       - nats_network
