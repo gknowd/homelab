@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  nats:
+    image: nats:latest
+    container_name: nats
+    restart: unless-stopped
+    ports:
+      - "4222:4222"   # client
+      - "6222:6222"   # cluster routes
+      - "8222:8222"   # monitoring HTTP
+    volumes:
+      - ./mnt/storage/nats:/data
+      - ./nats.conf:/etc/nats/nats.conf:ro
+    command: ["-c", "/etc/nats/nats.conf"]
+    networks:
+      - nats_network
+
+networks:
+  nats_network:
+    driver: bridge
