@@ -119,3 +119,4 @@ tmp/
 # Backups
 *.bak
 *.backup
+.claude/
