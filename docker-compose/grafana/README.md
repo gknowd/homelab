@@ -65,9 +65,6 @@ Security notes
 References
 - Grafana docs: https://grafana.com/docs/grafana/latest/
 
-If you want, I can also:
-- Add a `provisioning/` example for a Prometheus datasource and a sample dashboard.
-- Switch the compose to use a named Docker volume and update the README with exact paths.
 # Installation
 
 ## Deployment
