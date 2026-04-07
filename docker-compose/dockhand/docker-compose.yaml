@@ -1,0 +1,21 @@
+services:
+  dockhand:
+    image: dockhand/dockhand:latest
+    container_name: dockhand
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - dockhand_data:/app/data
+    environment:
+      - TZ=America/New_York
+    networks:
+      - dockhand
+
+volumes:
+  dockhand_data:
+
+networks:
+  dockhand:
+    driver: bridge
