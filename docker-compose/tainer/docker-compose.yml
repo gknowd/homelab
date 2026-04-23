@@ -1,0 +1,31 @@
+services:
+  tainer:
+    image: tainersh/tainer:latest
+    container_name: tainer
+    restart: unless-stopped
+    volumes:
+      - /mnt/storage/tainer-data:/app/data
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+
+      # HTTPS router
+      - "traefik.http.routers.tainer.rule=Host(`tainer.cloudtorq.io`)"
+      - "traefik.http.routers.tainer.entrypoints=websecure"
+      - "traefik.http.routers.tainer.tls=true"
+      - "traefik.http.routers.tainer.tls.certresolver=letsencrypt"
+
+      # Service: internal container port
+      - "traefik.http.services.tainer.loadbalancer.server.port=3000"
+
+      # Optional HTTP -> HTTPS redirect router
+      - "traefik.http.routers.tainer-redirect.rule=Host(`tainer.cloudtorq.io`)"
+      - "traefik.http.routers.tainer-redirect.entrypoints=web"
+      - "traefik.http.routers.tainer-redirect.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+networks:
+  traefik:
+    external: true
