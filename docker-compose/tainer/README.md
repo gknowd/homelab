@@ -36,7 +36,7 @@ The stack in `docker-compose.yml` is configured to:
 
 ```bash
 sudo mkdir -p /mnt/storage/tainer-data
-sudo chown -R 1000:1000 /mnt/storage/tainer-data
+sudo chown -R 1001:1001 /mnt/storage/tainer
 ```
 
 2. Ensure the external Traefik network exists:
