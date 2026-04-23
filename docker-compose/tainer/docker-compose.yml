@@ -4,7 +4,7 @@ services:
     container_name: tainer
     restart: unless-stopped
     volumes:
-      - /mnt/storage/tainer-data:/app/data
+      - /mnt/storage/tainer:/app/data
     networks:
       - traefik
     labels:
